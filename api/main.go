@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"posty/api/handler"
 	"posty/pkg/post"
 	"posty/pkg/user"
@@ -12,16 +13,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	db, err := DatabaseConnection()
 	if err != nil {
 		log.Fatal("Database Connection Error $s", err)
@@ -52,8 +48,12 @@ func main() {
 
 func DatabaseConnection() (*mongo.Database, error) {
 	// log.Println(os.Getenv("DB_URL"))
+	DB_URL := os.Getenv("DB_URL")
+	decoded_db_url, err := url.QueryUnescape(DB_URL)
+
+	fmt.Println("\n" + decoded_db_url)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("DB_URL")))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(decoded_db_url))
 	if err != nil {
 		return nil, err
 	}
