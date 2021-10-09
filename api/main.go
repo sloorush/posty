@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"posty/api/handler"
+	"posty/pkg/user"
 
 	"os"
 	"time"
@@ -24,10 +25,18 @@ func main() {
 	if err != nil {
 		log.Fatal("Database Connection Error $s", err)
 	}
-	fmt.Println("DB connection success!!", db)
+	fmt.Println("DB connection success!!")
+
+	userCollection := db.Collection("user")
+	userRepo := user.NewRepo(userCollection)
+	userService := user.NewService(userRepo)
 
 	http.HandleFunc("/ping", handler.PingHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.HandleFunc("/user", handler.AddUser(userService))
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func DatabaseConnection() (*mongo.Database, error) {
