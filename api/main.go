@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"posty/api/handler"
+	"posty/pkg/post"
 	"posty/pkg/user"
 
 	"os"
@@ -31,9 +32,16 @@ func main() {
 	userRepo := user.NewRepo(userCollection)
 	userService := user.NewService(userRepo)
 
+	postCollection := db.Collection("post")
+	postRepo := post.NewRepo(postCollection)
+	postService := post.NewService(postRepo)
+
 	http.HandleFunc("/ping", handler.PingHandler)
 	http.HandleFunc("/users", handler.AddUser(userService))
 	http.HandleFunc("/users/", handler.GetUser(userService))
+
+	http.HandleFunc("/posts", handler.AddPost(postService, userService))
+	http.HandleFunc("/posts/", handler.GetPost(postService))
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
