@@ -1,6 +1,8 @@
 # Posty
 
-Modular service to add posts written in golang
+![posty cover](/assets/cover.png)
+
+> Modular service to add posts written in golang
 
 ## Tasks
 
@@ -17,6 +19,6 @@ Modular service to add posts written in golang
 
 ## To run
 
-```sh=
+```sh
 go run api/main.go
 ```

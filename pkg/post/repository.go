@@ -26,6 +26,7 @@ func NewRepo(collection *mongo.Collection) Repository {
 
 func (r *repository) CreatePost(post *entities.Post) (*entities.Post, error) {
 	post.ID = primitive.NewObjectID()
+	post.Timestamp = primitive.NewObjectID().Timestamp()
 	_, err := r.Collection.InsertOne(context.Background(), post)
 	if err != nil {
 		return nil, err
