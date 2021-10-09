@@ -8,6 +8,9 @@ import (
 	"posty/pkg/entities"
 	"posty/pkg/user"
 	"posty/utils"
+	"strings"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func AddUser(userService user.Service) http.HandlerFunc {
@@ -16,48 +19,54 @@ func AddUser(userService user.Service) http.HandlerFunc {
 
 		err := json.NewDecoder(r.Body).Decode(&requestUser)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			NewErrorResponse(http.StatusBadRequest, err.Error(), w)
 			return
 		}
 
 		fmt.Println(requestUser)
 
 		if !utils.IsEmailValid(requestUser.Email) {
-			err1 := errors.New("invalid email")
-			if err1 != nil {
-				fmt.Println(err1.Error())
-				var data entities.Error
-
-				data.Status = http.StatusBadRequest
-				data.Message = err1.Error()
-
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(data.Status)
-				json.NewEncoder(w).Encode(data)
+			validationErr := errors.New("invalid email")
+			if validationErr != nil {
+				fmt.Println(validationErr.Error())
+				NewErrorResponse(http.StatusBadRequest, validationErr.Error(), w)
+				return
 			}
 		}
 
 		res, dberr := userService.InsertUser(&requestUser)
 		if dberr != nil {
 			fmt.Println(dberr.Error())
-			var data entities.Error
-
-			data.Status = http.StatusInternalServerError
-			data.Message = dberr.Error()
-
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(data.Status)
-			json.NewEncoder(w).Encode(data)
+			NewErrorResponse(http.StatusInternalServerError, dberr.Error(), w)
+			return
 		}
 
-		var data entities.Success
+		NewSuccessResponse(http.StatusAccepted, "User successfully created", res, w)
+	}
+}
 
-		data.Status = http.StatusAccepted
-		data.Message = "User successfully created"
-		data.Data = res
+func GetUser(userService user.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimPrefix(r.URL.Path, "/users/")
+		// fmt.Println(id)
+		objID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			NewErrorResponse(http.StatusInternalServerError, err.Error(), w)
+			return
+		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(data.Status)
-		json.NewEncoder(w).Encode(data)
+		fmt.Println(objID)
+
+		fetched, dberr := userService.FetchUser(objID)
+		if dberr != nil {
+			fmt.Println(dberr.Error())
+
+			NewErrorResponse(http.StatusInternalServerError, dberr.Error(), w)
+			return
+		}
+
+		// fmt.Println(fetched)
+
+		NewSuccessResponse(http.StatusAccepted, "User successfully fetched", fetched, w)
 	}
 }

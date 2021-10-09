@@ -32,7 +32,8 @@ func main() {
 	userService := user.NewService(userRepo)
 
 	http.HandleFunc("/ping", handler.PingHandler)
-	http.HandleFunc("/user", handler.AddUser(userService))
+	http.HandleFunc("/users", handler.AddUser(userService))
+	http.HandleFunc("/users/", handler.GetUser(userService))
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)

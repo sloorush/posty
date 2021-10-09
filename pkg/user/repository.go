@@ -4,13 +4,14 @@ import (
 	"context"
 	"posty/pkg/entities"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Repository interface {
 	CreateUser(user *entities.User) (*entities.User, error)
-	// ReadUser() (*[]entities.User, error)
+	ReadUser(id primitive.ObjectID) (*entities.User, error)
 	// UpdateUser(user *entities.User) (*entities.User, error)
 	// DeleteUser(ID string) error
 }
@@ -32,4 +33,16 @@ func (r *repository) CreateUser(user *entities.User) (*entities.User, error) {
 		return nil, err
 	}
 	return user, nil
+}
+
+func (r *repository) ReadUser(id primitive.ObjectID) (*entities.User, error) {
+	var user entities.User
+	err := r.Collection.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+
+	// fmt.Println(user)
+
+	return &user, nil
 }

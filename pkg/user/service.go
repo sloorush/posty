@@ -3,11 +3,13 @@ package user
 import (
 	"posty/pkg/entities"
 	"posty/utils"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Service interface {
 	InsertUser(user *entities.RequestUser) (*entities.User, error)
-	// FetchUsers() (*[]entities.Book, error)
+	FetchUser(id primitive.ObjectID) (*entities.User, error)
 	// UpdateBook(book *entities.Book) (*entities.Book, error)
 	// RemoveBook(ID string) error
 }
@@ -32,10 +34,10 @@ func (s *service) InsertUser(requestUser *entities.RequestUser) (*entities.User,
 	return s.repository.CreateUser(&user)
 }
 
-// func (s *service) FetchBooks() (*[]entities.Book, error) {
-// 	return s.repository.ReadBook()
+func (s *service) FetchUser(id primitive.ObjectID) (*entities.User, error) {
+	return s.repository.ReadUser(id)
+}
 
-// }
 // func (s *service) UpdateBook(book *entities.Book) (*entities.Book, error) {
 // 	return s.repository.UpdateBook(book)
 // }
