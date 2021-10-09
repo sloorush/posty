@@ -1,0 +1,5 @@
+#! /usr/bin/env sh
+
+DIR=$(dirname $(readlink -f $0))
+
+DB_URL=<URL encoded mongodb url> go run $DIR/api/main.go

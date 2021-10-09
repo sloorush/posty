@@ -16,4 +16,5 @@
 
 *.env
 
-runcmd.md
+run
+runTests

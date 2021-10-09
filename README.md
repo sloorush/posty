@@ -1,5 +1,7 @@
 # Posty
 
+[![Run Posty in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/11033610/UV5RkKR6)
+
 ![posty cover](/assets/cover.png)
 
 > Modular service to add posts written in golang
@@ -13,8 +15,8 @@
 - [x] List all posts of a user
 - [x] Authentication without using JWT
 - [x] Make the server thread safe
-- [ ] Add pagination to the list endpoint
-- [ ] Add unit tests
+- [x] Add pagination to the list endpoint
+- [x] Add unit tests
 - [x] Clean Architecture
 
 ## Instructions to run
@@ -35,17 +37,41 @@ go mod download
 
 - Execution
 
-```bash
-DB_URL=<encoded db url> go run api/main.go
-```
+  - direct
 
-> loading env because godotenv package could not be used
+    ```bash
+    DB_URL=<encoded db url> go run api/main.go
+    ```
 
-<!-- ### Run using docker
+    _loading env because godotenv package could not be used_
 
-```bash
-docker
-``` -->
+  - Execution using shell
+
+    ```bash
+    chmod +x runsample
+    ./runsample
+    ```
+
+  - Run directly using docker!
+
+    ```bash
+    docker run -p 8080:8080 rush3003/posty:latest
+    ```
+
+- Testing
+
+  - direct
+
+    ```bash
+    DB_URL=<encoded db url> go test api/endpoint_test.go
+    ```
+
+  - Execution using shell
+
+    ```bash
+    chmod +x runsample
+    ./runsample
+    ```
 
 ## Architecture
 
@@ -73,3 +99,7 @@ docker
   - Every post made has to be authenticated with the password of the user (similar to the case with pushing to github on an https remote)
 - packages
   - made using only [std](https://pkg.go.dev/std) packages and [go-mongo driver](go.mongodb.org/mongo-driver)
+
+## Documentation
+
+Visit the postman docs [here](https://documenter.getpostman.com/view/11033610/UV5RkKR6)

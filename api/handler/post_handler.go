@@ -54,7 +54,7 @@ func AddPost(postService post.Service, userService user.Service) http.HandlerFun
 			return
 		}
 
-		NewSuccessResponse(http.StatusAccepted, "Post successfully created", res, w)
+		NewSuccessResponse(http.StatusOK, "Post successfully created", res, w)
 	}
 }
 
@@ -80,7 +80,7 @@ func GetPost(postService post.Service) http.HandlerFunc {
 
 		// fmt.Println(fetched)
 
-		NewSuccessResponse(http.StatusAccepted, "Post successfully fetched", fetched, w)
+		NewSuccessResponse(http.StatusOK, "Post successfully fetched", fetched, w)
 	}
 }
 
@@ -107,6 +107,6 @@ func GetPostsByUser(postService post.Service) http.HandlerFunc {
 
 		fmt.Println(fetched)
 
-		NewSuccessResponse(http.StatusAccepted, "Post successfully fetched", fetched, w)
+		NewSuccessResponse(http.StatusOK, "Post successfully fetched", fetched, w)
 	}
 }

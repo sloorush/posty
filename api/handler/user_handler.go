@@ -41,7 +41,7 @@ func AddUser(userService user.Service) http.HandlerFunc {
 			return
 		}
 
-		NewSuccessResponse(http.StatusAccepted, "User successfully created", res, w)
+		NewSuccessResponse(http.StatusOK, "User successfully created", res, w)
 	}
 }
 
@@ -67,6 +67,6 @@ func GetUser(userService user.Service) http.HandlerFunc {
 
 		// fmt.Println(fetched)
 
-		NewSuccessResponse(http.StatusAccepted, "User successfully fetched", fetched, w)
+		NewSuccessResponse(http.StatusOK, "User successfully fetched", fetched, w)
 	}
 }
