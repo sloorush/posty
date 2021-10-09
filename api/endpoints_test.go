@@ -23,7 +23,7 @@ func DatabaseConnection() (*mongo.Database, error) {
 	DB_URL := os.Getenv("DB_URL")
 	decoded_db_url, err := url.QueryUnescape(DB_URL)
 
-	fmt.Println("\n" + decoded_db_url)
+	// fmt.Println("\n" + decoded_db_url)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(decoded_db_url))
 	if err != nil {

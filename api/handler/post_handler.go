@@ -38,14 +38,14 @@ func AddPost(postService post.Service, userService user.Service) http.HandlerFun
 			return
 		}
 
-		fmt.Println(userPassHash.Password)
+		// fmt.Println(userPassHash.Password)
 
 		if !utils.VerifyHash(requestPost.Password, userPassHash.Password) {
 			NewErrorResponse(http.StatusUnauthorized, "Unauthorized", w)
 			return
 		}
 
-		fmt.Println(requestPost)
+		// fmt.Println(requestPost)
 
 		res, dberr := postService.InsertPost(&post)
 		if dberr != nil {
@@ -68,7 +68,7 @@ func GetPost(postService post.Service) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(objID)
+		// fmt.Println(objID)
 
 		fetched, dberr := postService.FetchPost(objID)
 		if dberr != nil {
@@ -95,7 +95,7 @@ func GetPostsByUser(postService post.Service) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(objID)
+		// fmt.Println(objID)
 
 		fetched, dberr := postService.FetchAllPostsByUser(objID)
 		if dberr != nil {
@@ -105,7 +105,7 @@ func GetPostsByUser(postService post.Service) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(fetched)
+		// fmt.Println(fetched)
 
 		NewSuccessResponse(http.StatusOK, "Post successfully fetched", fetched, w)
 	}

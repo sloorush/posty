@@ -23,7 +23,7 @@ func AddUser(userService user.Service) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(requestUser)
+		// fmt.Println(requestUser)
 
 		if !utils.IsEmailValid(requestUser.Email) {
 			validationErr := errors.New("invalid email")
@@ -55,7 +55,7 @@ func GetUser(userService user.Service) http.HandlerFunc {
 			return
 		}
 
-		fmt.Println(objID)
+		// fmt.Println(objID)
 
 		fetched, dberr := userService.FetchUser(objID)
 		if dberr != nil {
