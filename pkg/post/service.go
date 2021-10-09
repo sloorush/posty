@@ -9,6 +9,7 @@ import (
 type Service interface {
 	InsertPost(post *entities.Post) (*entities.Post, error)
 	FetchPost(id primitive.ObjectID) (*entities.Post, error)
+	FetchAllPostsByUser(id primitive.ObjectID) (*[]entities.Post, error)
 }
 
 type service struct {
@@ -27,4 +28,8 @@ func (s *service) InsertPost(post *entities.Post) (*entities.Post, error) {
 
 func (s *service) FetchPost(id primitive.ObjectID) (*entities.Post, error) {
 	return s.repository.ReadPost(id)
+}
+
+func (s *service) FetchAllPostsByUser(id primitive.ObjectID) (*[]entities.Post, error) {
+	return s.repository.ReadAllPostsbyUser(id)
 }

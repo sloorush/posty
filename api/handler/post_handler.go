@@ -83,3 +83,30 @@ func GetPost(postService post.Service) http.HandlerFunc {
 		NewSuccessResponse(http.StatusAccepted, "Post successfully fetched", fetched, w)
 	}
 }
+
+// Get all posts by a particular user
+func GetPostsByUser(postService post.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimPrefix(r.URL.Path, "/posts/users/")
+		// fmt.Println(id)
+		objID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			NewErrorResponse(http.StatusInternalServerError, err.Error(), w)
+			return
+		}
+
+		fmt.Println(objID)
+
+		fetched, dberr := postService.FetchAllPostsByUser(objID)
+		if dberr != nil {
+			fmt.Println(dberr.Error())
+
+			NewErrorResponse(http.StatusInternalServerError, dberr.Error(), w)
+			return
+		}
+
+		fmt.Println(fetched)
+
+		NewSuccessResponse(http.StatusAccepted, "Post successfully fetched", fetched, w)
+	}
+}

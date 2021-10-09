@@ -12,6 +12,7 @@ import (
 type Repository interface {
 	CreatePost(post *entities.Post) (*entities.Post, error)
 	ReadPost(id primitive.ObjectID) (*entities.Post, error)
+	ReadAllPostsbyUser(id primitive.ObjectID) (*[]entities.Post, error)
 }
 type repository struct {
 	Collection *mongo.Collection
@@ -42,4 +43,20 @@ func (r *repository) ReadPost(id primitive.ObjectID) (*entities.Post, error) {
 	// fmt.Println(post)
 
 	return &post, nil
+}
+
+func (r *repository) ReadAllPostsbyUser(id primitive.ObjectID) (*[]entities.Post, error) {
+	var posts []entities.Post
+
+	cursor, err := r.Collection.Find(context.Background(), bson.M{"userid": id})
+
+	if err != nil {
+		return nil, err
+	}
+	for cursor.Next(context.TODO()) {
+		var post entities.Post
+		_ = cursor.Decode(&post)
+		posts = append(posts, post)
+	}
+	return &posts, nil
 }

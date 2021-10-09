@@ -43,6 +43,8 @@ func main() {
 	http.HandleFunc("/posts", handler.AddPost(postService, userService))
 	http.HandleFunc("/posts/", handler.GetPost(postService))
 
+	http.HandleFunc("/posts/users/", handler.GetPostsByUser(postService))
+
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
