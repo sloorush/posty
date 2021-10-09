@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Database Connection Error $s", err)
 	}
-	fmt.Println("DB connection success!!")
+	fmt.Println("DB connected")
 
 	userCollection := db.Collection("user")
 	userRepo := user.NewRepo(userCollection)

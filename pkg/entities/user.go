@@ -11,6 +11,6 @@ type User struct {
 
 type RequestUser struct {
 	Email    string
-	UserID   primitive.ObjectID
+	Name     string
 	Password string
 }

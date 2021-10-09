@@ -1,9 +1,12 @@
 package user
 
-import "posty/pkg/entities"
+import (
+	"posty/pkg/entities"
+	"posty/utils"
+)
 
 type Service interface {
-	InsertUser(user *entities.User) (*entities.User, error)
+	InsertUser(user *entities.RequestUser) (*entities.User, error)
 	// FetchUsers() (*[]entities.Book, error)
 	// UpdateBook(book *entities.Book) (*entities.Book, error)
 	// RemoveBook(ID string) error
@@ -19,8 +22,14 @@ func NewService(r Repository) Service {
 	}
 }
 
-func (s *service) InsertUser(user *entities.User) (*entities.User, error) {
-	return s.repository.CreateUser(user)
+func (s *service) InsertUser(requestUser *entities.RequestUser) (*entities.User, error) {
+	var user entities.User
+
+	user.Email = requestUser.Email
+	user.Password = utils.Hash(requestUser.Password)
+	user.Name = requestUser.Name
+
+	return s.repository.CreateUser(&user)
 }
 
 // func (s *service) FetchBooks() (*[]entities.Book, error) {
